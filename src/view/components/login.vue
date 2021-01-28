@@ -1,0 +1,166 @@
+<template>
+  <div class="wrapper-login">
+    <!--登陆-->
+        <el-card class="login-main" v-if="isLogin">
+          <h3 class="login-title">游客用户请登录</h3>
+          <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
+            <el-form-item prop="userName">
+              <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item prop="captcha">
+              <el-row :gutter="20">
+                <el-col :span="14">
+                  <el-input v-model="dataForm.captcha" placeholder="验证码">
+                  </el-input>
+                </el-col>
+                <el-col :span="10" class="login-captcha">
+                  <img :src="captchaPath" @click="getCaptcha()" alt="">
+                </el-col>
+              </el-row>
+            </el-form-item>
+            <el-form-item>
+              <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()">登录</el-button>
+              <el-button class="login-btn-submit" type="success" @click="isLogin=false">注册</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+    <!--注册-->
+    <el-card class="login-main" v-if="!isLogin">
+      <h3 class="login-title">注册新用户</h3>
+      <el-form :model="dataForm2" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
+        <el-form-item prop="userName">
+          <el-input v-model="dataForm2.userName" placeholder="用户名"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input v-model="dataForm2.password" type="password" placeholder="密码"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input v-model="dataForm2.password" type="password" placeholder="手机号"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="login-btn-submit" type="success" @click="isLogin=true">注册</el-button>
+          <el-button class="login-btn-submit" type="danger" @click="isLogin=true">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        isLogin: true,
+        dataForm: {
+          userName: '',
+          password: '',
+          uuid: '',
+          captcha: ''
+        },
+        dataForm2: {
+          userName: '',
+          password: '',
+        },
+        dataRule: {
+          userName: [
+            { required: true, message: '帐号不能为空', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '密码不能为空', trigger: 'blur' }
+          ],
+          captcha: [
+            { required: true, message: '验证码不能为空', trigger: 'blur' }
+          ]
+        },
+        captchaPath: ''
+      }
+    },
+    created () {
+      this.getCaptcha()
+    },
+    methods: {
+      // 提交表单
+      dataFormSubmit () {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            this.$http({
+              url: this.$http.adornUrl('/user/login'),
+              method: 'post',
+              data: this.$http.adornData({
+                'username': this.dataForm.userName,
+                'password': this.dataForm.password,
+                'uuid': this.dataForm.uuid,
+                'captcha': this.dataForm.captcha
+              })
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$cookies.set('token', data.token)
+                this.$router.replace({ name: 'home' })
+                console.log(data)
+              } else {
+                this.getCaptcha()
+                this.$message.error(data.msg)
+              }
+            })
+          }
+        })
+      },
+      // 获取验证码
+      getCaptcha () {
+        this.dataForm.uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
+        })
+        this.captchaPath = this.$http.adornUrl(`/user/captcha.jpg?uuid=${this.dataForm.uuid}`)
+      }
+    }
+  }
+</script>
+
+<style>
+  .wrapper-login {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(38, 50, 56, .6);
+    overflow: hidden;
+  }
+  .wrapper-login {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    content: "";
+    background-image: url(~@/assets/img/login_bg.jpg);
+    background-size: cover;
+    }
+  .login-main {
+    position: absolute;
+    top: 10%;
+    right: 50px;
+    padding: 10px 60px 200px 50px;
+    width: 470px;
+    height: 200px;
+    background-color: #ffffff;
+  }
+  .login-title {
+    font-size: 16px;
+  }
+  .login-captcha {
+    overflow: hidden;
+  }
+  .login-captcha img {
+    width: 100%;
+    cursor: pointer;
+  }
+  .login-btn-submit {
+    width: 40%;
+    margin-top: 38px;
+  }
+</style>
