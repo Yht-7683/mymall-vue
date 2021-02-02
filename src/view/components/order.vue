@@ -67,10 +67,13 @@
         fixed="right"
         header-align="center"
         align="center"
-        label="操作">
+        label="操作"
+      width="120px">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="updateHandle(scope.row.orderId,scope.row.totalPrice)">查看详情</el-button>
-          <el-button type="text" size="mini" @click="v = true">取消订单</el-button>
+          <el-button type="success" plain size="mini" @click="updateHandle(scope.row.orderId,scope.row.totalPrice)">查看详情</el-button>
+          <br/>
+          <br/>
+          <el-button type="danger" plain size="mini" @click="v = true">取消订单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -127,11 +130,12 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/mall/order/list'),
+          url: this.$http.adornUrl('/mall/order/select'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
-            'limit': this.pageSize
+            'limit': this.pageSize,
+            'username': this.$store.state.user.username
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

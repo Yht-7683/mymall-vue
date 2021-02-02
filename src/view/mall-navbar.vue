@@ -13,19 +13,22 @@
         <el-menu-item index="mall-1">
           家电
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item index="mall-2">
           服装
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="mall-3">
           食品
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="mall-4">
+          饰品
+        </el-menu-item>
+        <el-menu-item index="mall-5">
           生鲜
         </el-menu-item>
-        <el-menu-item index="5">
+        <el-menu-item index="mall-6">
           进口
         </el-menu-item>
-        <el-menu-item index="6">
+        <el-menu-item index="mall-7">
           数码
         </el-menu-item>
       </el-menu>
@@ -69,10 +72,10 @@
   .site-navbar__menu--right{
     float: left;
     top: 0px;
-    margin-left: 30vh;
+    margin-left: 25vh;
     width: 100%;
     height: 100%;
-    z-index: 1000;
+    /*z-index: 1000;*/
   }
   .site-navbar__menu--right .el-menu-item{
     width: 100px;
@@ -80,7 +83,6 @@
   }
   .site-navbar__body{
     position: absolute;
-    /*margin-left: 230px;*/
     margin-right: 0;
     padding-right: 15px;
     top: 0px;

@@ -1,9 +1,9 @@
 <template>
   <div class="mod-home" v-loading="dataListLoading">
-      <el-card class="goods"
-      v-for="(item,index) in dataList"
-      :key="index">
-        <el-image :src="item.img" style="max-width:250px;max-height:250px"></el-image>
+    <el-card class="goods"
+             v-for="(item,index) in dataList"
+             :key="index">
+      <el-image :src="item.img" style="max-width:250px;max-height:250px"></el-image>
       <div style="padding: 14px;">
         <span>{{item.name}}</span>
         <span>{{'¥'+item.price}}</span>
@@ -11,7 +11,7 @@
           <el-button type="text" class="button" @click="buy(item.goodsId)">了解详情</el-button>
         </div>
       </div>
-      </el-card>
+    </el-card>
     <goods-product v-if="isVisible" ref="GoodsProduct"></goods-product>
   </div>
 </template>
@@ -40,7 +40,7 @@
           url: this.$http.adornUrl('/mall/goods/select'),
           method: 'get',
           params: this.$http.adornParams({
-            'classificationName': "家电"
+            'classificationName': "服装"
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

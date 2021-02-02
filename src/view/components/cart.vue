@@ -42,7 +42,7 @@
         align="center"
         label="数量">
         <template slot-scope="scope">
-          <el-input-number v-model="scope.row.amount" @change="handleChange" :min="1"></el-input-number>
+          <el-input-number v-model="scope.row.amount"  :min="1"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column
@@ -60,14 +60,14 @@
         align="center"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="danger" size="mini" @click="updateHandle(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="mini" @click="deleteHandle(scope.row.cartId,scope.row.name)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div class="cartFooter">
       <span>应付金额：</span>
       <span class="total">{{'￥'+totalAmount}}</span>
-      <el-button type="success" size="small" style="margin-left: 15px">下单</el-button>
+      <el-button type="success" size="small" style="margin-left: 15px" @click="buy()">下单</el-button>
     </div>
     </div>
 </template>
@@ -79,9 +79,6 @@
         dataForm: {
         },
         dataList: [],
-        pageIndex: 1,
-        pageSize: 10,
-        totalPage: 0,
         dataListLoading: false,
         updateVisible: false
       }
@@ -103,40 +100,82 @@
     methods: {
       // 获取数据列表
       getDataList() {
-        this.dataList = [{
-          id:12,
-          img: 'http://121.41.91.101:2333/img/2.png',
-          name: '买你马',
-          price: 12312,
-          amount: 3,
-        },
-          {
-            id:13,
-            img: 'http://121.41.91.101:2333/img/2.png',
-            name: '买你马',
-            price: 1212,
-            amount: 2,
-          }]
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl('/mall/cart/list'),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            console.log(data)
+            this.dataList = data.list
+          } else {
+            this.dataList = []
+          }
+          this.dataListLoading = false
+        })
       },
-      handleChange(value) {
-        console.log(value);
+      deleteHandle(cartId,name) {
+        this.$confirm(`确定对商品:${name} 进行删除操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/mall/cart/delete'),
+            method: 'post',
+            data: this.$http.adornData(cartId,false)
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {})
       },
 
-      // 每页数
-      sizeChangeHandle(val) {
-        this.pageSize = val
-        this.pageIndex = 1
-        this.getDataList()
-      },
-      // 当前页
-      currentChangeHandle(val) {
-        this.pageIndex = val
-        this.getDataList()
-      },
-      // 查看详情
-      updateHandle(id) {
-        console.log(id)
-
+      // 下单
+      buy() {
+        var cartIds = this.dataList.map(item => {
+          return item.cartId
+        })
+        this.$confirm(`进行购买，请支付${this.totalAmount}+20元运费`, '提示', {
+          confirmButtonText: '立即支付',
+          cancelButtonText: '再等等',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/mall/order/save'),
+            method: 'post',
+            data: this.$http.adornData({
+              'pay': 1,
+              'totalPrice':this.totalAmount,
+              'freight': 20,
+              'status': 1,
+              'cartIds': cartIds,
+              'orderProductList': this.dataList
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '购买成功',
+                type: 'success',
+                duration: 1500,
+              })
+              this.$router.replace({path: '/order'})
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {})
       },
     }
   }
