@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
       '/proxyApi': {
         // target: 'http://localhost:9500/',
-        target: 'http://121.41.91.101:9000/',
+        target: 'http://121.41.91.101:9500/',
         changeOrigin: true,
         pathRewrite: {
           '^/proxyApi': '/'
@@ -23,7 +23,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8002, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

@@ -30,9 +30,6 @@ export default new Router({
       component: Login
     },
     {
-      path: '/main',
-      name: 'main',
-      component: Main,
       beforeEnter (to, from, next) {
         let token = Vue.$cookies.get('token')
         if (!token || !/\S/.test(token)) {
@@ -42,6 +39,9 @@ export default new Router({
         }
         next()
       },
+      path: '/main',
+      name: 'main',
+      component: Main,
       children: [
         {
           path: '/',
@@ -49,12 +49,12 @@ export default new Router({
           component: MallMain,
           children: [
             {
-              path: '/',
+              path: '/home',
               name: 'home',
               component: Home,
             },
             {
-              path: '/home',
+              path: '/',
               name: 'home',
               component: Home,
             },

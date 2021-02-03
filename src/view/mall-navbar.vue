@@ -20,7 +20,7 @@
           食品
         </el-menu-item>
         <el-menu-item index="mall-4">
-          饰品
+          家纺
         </el-menu-item>
         <el-menu-item index="mall-5">
           生鲜

@@ -170,7 +170,7 @@
                 type: 'success',
                 duration: 1500,
               })
-              this.$router.replace({path: '/order'})
+              this.$router.replace({name: 'order'})
             } else {
               this.$message.error(data.msg)
             }

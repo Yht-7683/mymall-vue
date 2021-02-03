@@ -91,11 +91,12 @@
     <el-dialog
       title="提示"
       :visible.sync="v"
+      :close-on-click-modal="false"
+      :modal-append-to-body="false"
       width="30%"
       >
-      <span>这是一段信息</span>
+      <span>已经缺无法取消</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="v = false">取 消</el-button>
     <el-button type="primary" @click="v = false">确 定</el-button>
   </span>
     </el-dialog>

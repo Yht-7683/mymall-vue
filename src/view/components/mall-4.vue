@@ -3,7 +3,7 @@
     <el-card class="goods"
              v-for="(item,index) in dataList"
              :key="index">
-      <el-image :src="item.img" style="max-width:250px;max-height:250px"></el-image>
+      <el-image :src="item.img" style="max-width:200px;max-height:200px"></el-image>
       <div style="padding: 14px;">
         <span>{{item.name}}</span>
         <span>{{'¥'+item.price}}</span>
@@ -40,7 +40,7 @@
           url: this.$http.adornUrl('/mall/goods/select'),
           method: 'get',
           params: this.$http.adornParams({
-            'classificationName': "饰品"
+            'classificationName': "家纺"
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
