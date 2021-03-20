@@ -94,7 +94,7 @@
         this.dataList.map((item,index)=>{
           amount+=item.amount*item.price;
         })
-        return amount;
+        return amount.toFixed(2);
       }
     },
     methods: {
@@ -107,7 +107,6 @@
           params: this.$http.adornParams()
         }).then(({data}) => {
           if (data && data.code === 0) {
-            console.log(data)
             this.dataList = data.list
           } else {
             this.dataList = []
@@ -164,7 +163,7 @@
               'orderProductList': this.dataList
             })
           }).then(({data}) => {
-            if (data && data.code === 0) {
+            if (data && data.code === 200) {
               this.$message({
                 message: '购买成功',
                 type: 'success',

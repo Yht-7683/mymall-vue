@@ -32,7 +32,16 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" plain @click="buy()">立即购买</el-button>
+      <el-popconfirm
+        confirm-button-text='好的'
+        cancel-button-text='再看看'
+        icon="el-icon-info"
+        icon-color="red"
+        title='另需20元运费，确定购买？'
+        @confirm= "buy()"
+      >
+      <el-button type="primary" plain slot="reference">立即购买</el-button>
+      </el-popconfirm>
       <el-button type="success" plain @click="saveCart()">加入购物车</el-button>
       <el-button type="danger" plain @click="visible = false">取消</el-button>
     </span>
@@ -120,11 +129,6 @@
           'goodsAmount': this.dataForm.realAmount,
           'goodsPrice': this.dataForm.price
         }
-        this.$confirm(`进行购买，请支付${this.totalAmount}+20元运费`, '提示', {
-          confirmButtonText: '立即支付',
-          cancelButtonText: '再等等',
-          type: 'warning'
-        }).then(() => {
           this.$http({
             url: this.$http.adornUrl('/mall/order/buy'),
             method: 'post',
@@ -136,7 +140,7 @@
               'orderProduct': orderProduct
             })
           }).then(({data}) => {
-            if (data && data.code === 0) {
+            if (data && data.code === 200) {
               this.$message({
                 message: '购买成功',
                 type: 'success',
@@ -153,7 +157,6 @@
               this.$message.error(data.msg)
             }
           })
-        }).catch(() => {})
       }
     }
   }

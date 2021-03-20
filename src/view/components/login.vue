@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper-login">
+    <div class="brand-info">
+      <h2 class="brand-info__text">欢迎登陆网上商城</h2>
+    </div>
     <!--登陆-->
         <el-card class="login-main" v-if="isLogin">
           <h3 class="login-title">游客用户请登录</h3>
@@ -148,6 +151,17 @@
     width: 470px;
     height: 200px;
     background-color: #ffffff;
+    opacity:0.93;
+  }
+  .brand-info {
+    margin: 220px 100px 0 90px;
+    float: left;
+    color: #fff;
+  }
+  .brand-info__text {
+    margin:  0;
+    font-size: 48px;
+    font-weight: 200;
   }
   .login-title {
     font-size: 16px;

@@ -10,14 +10,8 @@
         prop="orderId"
         header-align="center"
         align="center"
-        width="80"
+        width="160"
         label="订单编号">
-      </el-table-column>
-      <el-table-column
-        prop="username"
-        header-align="center"
-        align="center"
-        label="用户名">
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -95,7 +89,7 @@
       :modal-append-to-body="false"
       width="30%"
       >
-      <span>已经缺无法取消</span>
+      <span>已经确定无法取消</span>
       <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="v = false">确 定</el-button>
   </span>
